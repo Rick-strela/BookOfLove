@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книга Наших Пригод</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="scene">
+        <div class="book" id="book">
+            
+            <div class="cover-wrapper" id="coverWrapper">
+                <div class="cover front">
+                    <div class="hakim-logo">♥</div>
+                    <h1>BOOK OF LOVE</h1>
+                    <p>By Dr. Hakim</p>
+                    <div class="input-group">
+                        <input type="text" id="pass" placeholder="Код спільності...">
+                        <button onclick="openBook()">ВІДКРИТИ</button>
+                    </div>
+                </div>
+                <div class="cover back">
+                    <div class="games-list">
+                        <h3>Наші світи:</h3>
+                        <ul>
+                            <li>It Takes Two</li>
+                            <li>Phasmaphobia</li>
+                            <li>Ghost Watchers</li>
+                            <li>Supermarket Simulator</li>
+                            <li>Civilization VI</li>
+                            <li>Call of Duty</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="page-left">
+                    <div id="text-left" class="text-container"></div>
+                </div>
+                <div class="page-right">
+                    <div id="text-right" class="text-container"></div>
+                    <div class="footer-area">
+                        <div id="love-footer" class="love-msg">Я ТЕБЕ ЛЮБЛЮ</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,53 +1,80 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Книга Наших Пригод</title>
+    <title>Для тебя</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="scene">
-        <div class="book" id="book">
-            
-            <div class="cover-wrapper" id="coverWrapper">
-                <div class="cover front">
-                    <div class="hakim-logo">♥</div>
-                    <h1>BOOK OF LOVE</h1>
-                    <p>By Dr. Hakim</p>
-                    <div class="input-group">
-                        <input type="text" id="pass" placeholder="Код спільності...">
-                        <button onclick="openBook()">ВІДКРИТИ</button>
+    <div id="auth-screen" class="screen active">
+        <div class="lock-card">
+            <div class="lock-icon-wrapper">
+                <i class="fa-solid fa-lock" id="lock-icon"></i>
+            </div>
+            <h2>Private Archive</h2>
+            <p class="hint">Доступ только для одного человека.</p>
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Введите ключ доступа">
+                <button id="unlock-btn"><i class="fa-solid fa-key"></i></button>
+            </div>
+            <p id="error-message" class="error-msg"></p>
+        </div>
+    </div>
+
+    <div id="book-screen" class="screen">
+        <div class="book-container">
+            <div class="book">
+                
+                <div class="page active-page" data-page="1">
+                    <div class="page-content">
+                        <span class="chapter-num">Глава I. То, что я ношу в себе</span>
+                        <h3>Признание</h3>
+                        <p class="book-text">Лиза, этот сайт — мое признание тебе в чувствах. Я создал его, потому что сказать такое вслух — это огромный вызов для меня, но и молчать больше я не могу.</p>
+                        <p class="book-text">Ты мне очень нравишься. Но то, как именно ты на меня повлияла и почему ты стала для меня особенной — я решился написать на следующей странице. Переверни её...</p>
                     </div>
                 </div>
-                <div class="cover back">
-                    <div class="games-list">
-                        <h3>Наші світи:</h3>
-                        <ul>
-                            <li>It Takes Two</li>
-                            <li>Phasmaphobia</li>
-                            <li>Ghost Watchers</li>
-                            <li>Supermarket Simulator</li>
-                            <li>Civilization VI</li>
-                            <li>Call of Duty</li>
-                        </ul>
-                    </div>
+
+            <div class="page" data-page="2">
+                <div class="page-content">
+                    <!-- Вот эта строчка, которую я потерял: -->
+                    <span class="chapter-num">Глава II. Лиза</span>
+                    
+                    <p class="book-text">Я хочу быть с тобой честным. Мои чувства к тебе появились не по щелчку пальцев, не в первую секунду. Поначалу это была просто симпатия, но постепенно ты начала менять мой привычный мир.</p>
+                    
+                    <p class="book-text">Ты зацепила меня чем-то настолько особенным и глубоким, что я просто не смог и не захотел уходить. И вот я здесь, до сих пор рядом с тобой, и с каждым днем понимаю это всё отчетливее.</p>
+                    
+                    <p class="book-text">Ты мне очень нравишься. Твоя улыбка, твой смех, то, как мне спокойно рядом с тобой. Если бы меня спросили, какое будущее я вижу для себя, я бы ответил, что хочу, чтобы именно такая девушка, как ты, была со мной рядом. Всегда.</p>
                 </div>
             </div>
 
-            <div class="main-content">
-                <div class="page-left">
-                    <div id="text-left" class="text-container"></div>
-                </div>
-                <div class="page-right">
-                    <div id="text-right" class="text-container"></div>
-                    <div class="footer-area">
-                        <div id="love-footer" class="love-msg">Я ТЕБЕ ЛЮБЛЮ</div>
+                <div class="page" data-page="3">
+                    <div class="page-content">
+                        <span class="chapter-num">Финал</span>
+                        <h3>Главный вопрос</h3>
+                        <div class="proposal-zone">
+                            <p class="question-text">Я бы очень хотел видеть тебя своей девушкой в будущем. Что скажешь?</p>
+                            <div class="final-buttons">
+                                <button class="btn-yes">Да, я согласна! ❤️</button>
+                                <button class="btn-no">Нет</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
+        </div>
+
+        <div class="book-controls">
+            <button id="prev-btn" disabled><i class="fa-solid fa-arrow-left"></i> Назад</button>
+            <span id="page-counter">1 / 3</span>
+            <button id="next-btn">Вперед <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
 

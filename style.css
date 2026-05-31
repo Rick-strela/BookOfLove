@@ -1,129 +1,345 @@
-/* Общие настройки экрана — убираем скролл */
-html, body {
+:root {
+    --bg-main: #f4f1ea;       /* Цвет теплого минималистичного фона */
+    --paper-white: #fffdfa;  /* Цвет книжной страницы */
+    --text-dark: #2c2c2c;     /* Мягкий черный для текста */
+    --text-muted: #8c8a84;    /* Серый для элементов навигации */
+    --accent-red: #d95d55;    /* Приглушенный романтичный красный */
+    --accent-green: #4a7c59;  /* Приглушенный зеленый для "Да" */
+}
+
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Запрещаем скролл всей страницы */
-    background: #1a1a1a;
+}
+
+body {
+    background-color: var(--bg-main);
+    /* Текстура шума поверх фона */
+    background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+    color: var(--text-dark);
+    font-family: 'Montserrat', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-.scene {
-    /* Немного уменьшили размеры, чтобы всё влезло */
-    width: 400px; 
-    height: 520px;
-    perspective: 2000px;
-    position: relative;
+/* Экраны */
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    perspective: 1000px; /* Готовим глубину */
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* КАСТОМНЫЙ ЭКРАН БЛОКИРОВКИ */
+.lock-card {
+    background: rgba(255, 253, 250, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 40px 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.lock-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background: var(--paper-white);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    color: var(--accent-red);
+    font-size: 24px;
+    animation: slowPulse 2s infinite ease-in-out;
+}
+
+.lock-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.lock-card .hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    display: flex;
+    background: var(--paper-white);
+    padding: 6px;
+    border-radius: 50px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    border: 1px solid #e2ded5;
+}
+
+.input-group:focus-within {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 12px rgba(217, 93, 85, 0.2);
+    transition: all 0.3s ease;
+}
+
+#password-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 0 20px;
+    font-size: 16px;
+    text-align: center;
+    font-family: inherit;
+}
+
+#unlock-btn {
+    background: var(--text-dark);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+#unlock-btn:hover {
+    background: var(--accent-red);
+    transform: scale(1.05);
+}
+
+.error-msg {
+    color: var(--accent-red);
+    font-size: 13px;
+    margin-top: 15px;
+    height: 15px;
+}
+
+/* СТИЛИЗАЦИЯ КНИГИ */
+.book-container {
+    width: 100%;
+    filter: drop-shadow(0 30px 50px rgba(0,0,0,0.08));
 }
 
 .book {
     width: 100%;
-    height: 100%;
+    min-height: 480px; /* Минимальная высота, чтобы книга не схлопывалась */
+    height: auto;       /* Книга будет растягиваться, если текста много */
+    background: var(--paper-white);
+    background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+    border-radius: 4px 24px 24px 4px;
     position: relative;
-    transform-style: preserve-3d;
-    transition: transform 1.5s ease;
+    overflow: hidden;
+    display: flex; /* Поможет внутренним страницам занимать всю высоту */
 }
 
-/* ОБЛОЖКА */
-.cover-wrapper {
+/* Имитация объема переплета (корешка) слева страницы */
+.book::before {
+    content: "";
     position: absolute;
-    width: 100%;
-    height: 100%; /* Теперь строго по размеру сцены */
-    z-index: 100;
-    transform-origin: left center;
-    transition: transform 1.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-    transform-style: preserve-3d;
+    top: 0; left: 0;
+    width: 25px; height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0) 100%);
+    z-index: 10;
+    pointer-events: none;
+    border-left: 4px solid #dbd7cd; /* Сам торец */
 }
 
-.book.opened .cover-wrapper {
-    transform: rotateY(-175deg);
-}
-
-.cover {
+.page {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
-    border-radius: 5px 15px 15px 5px;
-    box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
-}
-
-.front {
-    background: linear-gradient(135deg, #e67e22, #d35400);
-    border: 6px solid #f1c40f;
-    color: white;
-    display: flex;
+    padding: 40px 30px 40px 50px; /* Чуть уменьшили паддинги, чтобы дать тексту больше места */
+    display: none;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: 20px;
+    background: transparent;
+    
+    /* Добавляем внутренний скролл на случай, если экран совсем маленький */
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
 }
 
-.back {
-    background: #2c3e50;
-    border: 6px solid #f1c40f;
-    transform: rotateY(180deg);
-    padding: 30px;
-    color: #f1c40f;
-    box-sizing: border-box;
-}
-
-/* ВНУТРЕННОСТИ — теперь точно такие же по размеру, как обложка */
-.main-content {
-    position: absolute;
-    width: 98%; /* Чуть меньше, чтобы не торчали из-под обложки в закрытом виде */
-    height: 96%;
-    top: 2%; /* Центрируем страницы внутри обложки */
-    left: 1%;
-    background: #fdf5e6;
-    border: 1px solid #e0cdab;
+.page.active-page {
     display: flex;
-    z-index: 1;
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+    animation: pageTurnIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
-.page-left, .page-right {
-    width: 50%;
-    height: 100%;
-    padding: 25px;
-    box-sizing: border-box;
-    position: relative;
-    border-right: 1px solid #e0cdab;
-    overflow: hidden; /* Чтобы текст не создавал внутренний скролл */
+/* На всякий случай сделаем кастомный красивый скроллбар, чтобы он не портил визуал книги */
+.page::-webkit-scrollbar {
+    width: 4px;
+}
+.page::-webkit-scrollbar-track {
+    background: transparent;
+}
+.page::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
-/* Текст и футер */
-.text-container {
+.chapter-num {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.page-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.book-text {
     font-size: 16px;
-    line-height: 1.5;
-    color: #2c3e50;
-    max-height: 80%; /* Ограничиваем высоту текста */
+    line-height: 1.8;
+    color: #4a4a4a;
+    margin-bottom: 15px;
+    font-weight: 300;
 }
 
-.footer-area {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
+/* Зона вопроса и интерактивные кнопки */
+.proposal-zone {
     text-align: center;
 }
 
-.love-msg {
-    color: #e74c3c;
+.question-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
     font-size: 22px;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 1.5s ease;
+    line-height: 1.6;
+    margin-bottom: 35px;
 }
 
-.visible { opacity: 1 !important; }
+.final-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    height: 50px;
+    position: relative;
+}
 
-/* Элементы декора */
-.hakim-logo { font-size: 50px; color: #f1c40f; margin-bottom: 5px; }
-.games-list li { margin: 10px 0; font-size: 16px; color: white; }
-input { padding: 10px; border-radius: 5px; border: none; width: 180px; margin-bottom: 5px; }
-button { padding: 10px 20px; background: #f1c40f; border: none; color: #d35400; font-weight: bold; cursor: pointer; border-radius: 5px; }
+.btn-yes, .btn-no {
+    padding: 0 30px;
+    height: 48px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.btn-yes {
+    background-color: var(--accent-green);
+    color: white;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.btn-yes:hover {
+    background-color: #3b6347;
+    transform: translateY(-2px);
+}
+
+.btn-no {
+    background-color: var(--accent-red);
+    color: white;
+    z-index: 9999;
+}
+
+/* Навигация под книгой */
+.book-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 30px;
+    padding: 0 10px;
+}
+
+.book-controls button {
+    background: transparent;
+    border: none;
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.book-controls button:hover:not(:disabled) {
+    color: var(--accent-red);
+}
+
+.book-controls button:disabled {
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+#page-counter {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Частицы следа 💔 */
+.trail-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    font-size: 22px;
+    animation: particleFade 0.8s ease-out forwards;
+}
+
+/* Пульсация для кнопки Вперед, пока книга не дойдет до финала */
+#next-btn:not(:disabled) {
+    animation: hintPulse 2s infinite ease-in-out;
+    color: var(--accent-red); /* Сделаем её чуть заметнее */
+}
+
+@keyframes hintPulse {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); } /* Кнопка будет мягко покачиваться вправо */
+}
+
+/* АНИМАЦИИ */
+@keyframes slowPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+@keyframes pageTurnIn {
+    0% { opacity: 0; transform: rotateY(15deg) translateX(30px); }
+    100% { opacity: 1; transform: rotateY(0deg) translateX(0); }
+}
+
+@keyframes particleFade {
+    to {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0.3);
+    }
+}
